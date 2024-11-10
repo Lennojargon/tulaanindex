@@ -1,0 +1,346 @@
+<html><head><base href="." />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tulaan Beach Resort - Luxury Booking</title>
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    min-height: 100vh;
+}
+
+.header {
+    background: #1a1a1a;
+    color: white;
+    padding: 1rem;
+    text-align: center;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 20px;
+}
+
+.hero-section {
+    height: 400px;
+    background-image: url('https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?auto=format&fit=crop&w=1200&q=80');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    margin-bottom: 2rem;
+}
+
+.booking-form {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #333;
+    font-weight: bold;
+}
+
+input, select {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.btn {
+    background: #2c3e50;
+    color: white;
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.3s ease;
+}
+
+.btn:hover {
+    background: #34495e;
+}
+
+.room-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.room-card {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.room-card:hover {
+    transform: translateY(-5px);
+}
+
+.room-image {
+    height: 300px;
+    background-size: cover;
+    background-position: center;
+}
+
+.room-info {
+    padding: 1.5rem;
+}
+
+.room-price {
+    color: #2c3e50;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.currency {
+    font-size: 0.8em;
+    color: #666;
+}
+
+.availability {
+    padding: 0.5rem;
+    border-radius: 5px;
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.available {
+    background: #2ecc71;
+    color: white;
+}
+
+.unavailable {
+    background: #e74c3c;
+    color: white;
+}
+
+.room-features {
+    margin-top: 1rem;
+    padding: 0.5rem;
+    background: #f5f5f5;
+    border-radius: 5px;
+}
+
+.feature-list {
+    list-style: none;
+    margin-top: 0.5rem;
+}
+
+.feature-list li {
+    margin-bottom: 0.3rem;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease forwards;
+}
+</style>
+</head>
+<body>
+    <header class="header">
+        <h1>Tulaan Beach Resort</h1>
+        <p>Your Luxury Escape Awaits</p>
+    </header>
+
+    <div class="hero-section">
+        <h2>Welcome to Paradise</h2>
+    </div>
+
+    <div class="container">
+        <form class="booking-form" id="bookingForm">
+            <div class="form-group">
+                <label for="checkIn">Check-in Date</label>
+                <input type="date" id="checkIn" required>
+            </div>
+            <div class="form-group">
+                <label for="checkOut">Check-out Date</label>
+                <input type="date" id="checkOut" required>
+            </div>
+            <div class="form-group">
+                <label for="guests">Number of Guests</label>
+                <select id="guests" required>
+                    <option value="1">1 Guest</option>
+                    <option value="2">2 Guests</option>
+                    <option value="3">3 Guests</option>
+                    <option value="4">4 Guests</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" required>
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" required>
+            </div>
+            <button type="submit" class="btn">Check Availability</button>
+        </form>
+
+        <div class="room-list" id="roomList">
+            <!-- Rooms will be dynamically inserted here -->
+        </div>
+    </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const rooms = [
+        {
+            id: 1,
+            name: 'Deluxe Room',
+            price: 1000,
+            capacity: 4,
+            available: 5,
+            description: 'Luxurious native-style room with breakfast included',
+            features: ['Breakfast included', 'Native-inspired design', 'Ocean view', 'Air conditioning']
+        },
+        {
+            id: 2,
+            name: 'Family Room',
+            price: 3999,
+            capacity: 10,
+            available: 3,
+            description: 'Spacious family room perfect for large groups',
+            features: ['Breakfast included', 'Multiple beds', 'Large living area', 'Private balcony']
+        },
+        {
+            id: 3,
+            name: 'Barkadahan Room',
+            price: 10000,
+            capacity: 10,
+            available: 2,
+            description: 'Ultimate group experience with premium amenities',
+            features: ['Premium breakfast', 'Private function area', 'Beachfront access', 'Entertainment system']
+        }
+    ];
+
+    const ownerPhone = "0923876589";
+
+    function formatCurrency(amount) {
+        return new Intl.NumberFormat('en-PH', {
+            style: 'currency',
+            currency: 'PHP'
+        }).format(amount);
+    }
+
+    function displayRooms(filteredRooms = rooms) {
+        roomList.innerHTML = '';
+        filteredRooms.forEach(room => {
+            const roomCard = document.createElement('div');
+            roomCard.className = 'room-card fade-in';
+            roomCard.innerHTML = `
+                <div class="room-image" style="background-image: url('https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=600&h=300&q=80')"></div>
+                <div class="room-info">
+                    <h3>${room.name}</h3>
+                    <p>${room.description}</p>
+                    <p class="room-price">${formatCurrency(room.price)} <span class="currency">per night</span></p>
+                    <p>Maximum capacity: ${room.capacity} guests</p>
+                    <div class="room-features">
+                        <strong>Features:</strong>
+                        <ul class="feature-list">
+                            ${room.features.map(feature => `<li>${feature}</li>`).join('')}
+                        </ul>
+                    </div>
+                    <div class="availability ${room.available > 0 ? 'available' : 'unavailable'}">
+                        ${room.available} rooms available
+                    </div>
+                    ${room.available > 0 ? `<button onclick="bookRoom(${room.id})" class="btn" style="width: 100%; margin-top: 1rem;">Book Now</button>` : ''}
+                </div>
+            `;
+            roomList.appendChild(roomCard);
+        });
+    }
+
+    function bookRoom(roomId) {
+        const checkIn = document.getElementById('checkIn').value;
+        const checkOut = document.getElementById('checkOut').value;
+        const name = document.getElementById('name').value;
+        const phone = document.getElementById('phone').value;
+
+        if (!checkIn || !checkOut || !name || !phone) {
+            alert('Please fill in all required fields!');
+            return;
+        }
+
+        const room = rooms.find(r => r.id === roomId);
+        if (room) {
+            const bookingDetails = `
+                Booking Request for ${room.name}
+                Guest: ${name}
+                Phone: ${phone}
+                Check-in: ${checkIn}
+                Check-out: ${checkOut}
+                Total: ${formatCurrency(room.price)} per night
+            `;
+
+            alert(`Your booking request has been sent to the owner (${ownerPhone}). Please wait for confirmation.\n\n${bookingDetails}`);
+            
+            // Simulating owner confirmation
+            const ownerConfirmed = confirm(`[OWNER CONFIRMATION SIMULATION]\nDo you want to confirm this booking?\n\n${bookingDetails}`);
+            
+            if (ownerConfirmed) {
+                alert('Booking confirmed by the owner! Thank you for choosing Tulaan Beach Resort.');
+                room.available--;
+                if (room.available <= 0) {
+                    room.available = 0;
+                }
+                displayRooms();
+            } else {
+                alert('Booking was not confirmed by the owner. Please try different dates or contact us directly.');
+            }
+        }
+    }
+
+    // Event listeners and initialization
+    document.getElementById('bookingForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const guests = parseInt(document.getElementById('guests').value);
+        const filteredRooms = rooms.filter(room => room.capacity >= guests);
+        displayRooms(filteredRooms);
+    });
+
+    // Initial room display
+    displayRooms();
+
+    // Make functions available globally
+    window.rooms = rooms;
+    window.displayRooms = displayRooms;
+    window.formatCurrency = formatCurrency;
+    window.bookRoom = bookRoom;
+});
+</script>
+</body></html>
